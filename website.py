@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from sqlalchemy import create_engine
+from dotenv import load_dotenv
 
 import users
 import members
@@ -9,8 +10,11 @@ import caregivers
 import jobs
 import job_applications
 import appointments
+import os
+load_dotenv()
 
-DATABASE_URI = 'postgresql://postgres:postgres@localhost:5432/db'
+
+DATABASE_URI = os.environ.get("DATABASE_URI")
 engine = create_engine(DATABASE_URI)
 st.set_page_config(page_title="DBMS 2 assignment", layout="wide", initial_sidebar_state="expanded")
 
@@ -50,4 +54,5 @@ def main():
 
 
 if __name__ == "__main__":
+    print(os.environ.get("DATABASE_URI"))
     main()
