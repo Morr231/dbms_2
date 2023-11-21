@@ -120,26 +120,13 @@ turan_member_user_ids = (
     .all()
 )
 
-# Extracting member_user_id values from the rows
 turan_member_user_ids = [row[0] for row in turan_member_user_ids]
-
-# Check if there are any member_user_ids before proceeding with the delete
 if turan_member_user_ids:
-    # Delete associated appointments for the Turan members
     session.query(appointment_table).filter(appointment_table.c.member_user_id.in_(turan_member_user_ids)).delete(synchronize_session=False)
-
-    # Delete associated addresses for the Turan members
     session.query(address_table).filter(address_table.c.member_user_id.in_(turan_member_user_ids)).delete(synchronize_session=False)
-
-    # Delete associated job applications for the Turan members
     session.query(job_application_table).filter(job_application_table.c.job_id == job_table.c.job_id, job_table.c.member_user_id.in_(turan_member_user_ids)).delete(synchronize_session=False)
-
-    # Delete associated jobs for the Turan members
     session.query(job_table).filter(job_table.c.member_user_id.in_(turan_member_user_ids)).delete(synchronize_session=False)
-
-    # Delete members living on Turan street
     session.query(member_table).filter(member_table.c.member_user_id.in_(turan_member_user_ids)).delete(synchronize_session=False)
-
     session.commit()
     print("Members living on Turan street deleted.")
 else:
